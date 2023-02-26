@@ -2,6 +2,7 @@
 # DBNEXUS
 
 A Unified Platform to manage all your databases!
+![WhatsApp Image 2023-02-26 at 12 02 57](https://user-images.githubusercontent.com/65999534/221398664-bc63ec6d-0741-4bd3-ae56-949c4cfcdea8.jpg)
 
 
 ## Run Locally

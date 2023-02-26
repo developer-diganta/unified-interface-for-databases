@@ -29,8 +29,20 @@ const saveHash = async (hash,data) => {
 const getHash = async (hash) => {
     try {
         const hashValue = await Hash.find({ hash: hash });
-        console.log(hashValue);
-        return JSON.parse(hashValue.data);
+        console.log(hashValue[0].hash);
+        return hashValue[0].hash;
+    }
+    catch (err) {
+        console.log(err);
+        return null;
+    }
+}
+
+const getFromHash = async (hash) => {
+    try {
+        const hashValue = await Hash.find({ hash: hash });
+        console.log(hashValue[0].data);
+        return hashValue[0].data;
     }
     catch (err) {
         console.log(err);
@@ -40,6 +52,7 @@ const getHash = async (hash) => {
 
 module.exports = {
     saveHash,
-    getHash
+    getHash,
+    getFromHash
 }
 

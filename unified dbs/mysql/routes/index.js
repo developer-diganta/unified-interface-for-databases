@@ -17,4 +17,5 @@ router.post("/insertData", mySQLRoutes.insertData);
 router.post("/deleteData", mySQLRoutes.deleteData);
 router.post("/updateData", mySQLRoutes.updateData);
 router.post("/getReport", mySQLRoutes.getReport);
+router.post("/connectToDB", mySQLRoutes.getConnected);
 module.exports = router;

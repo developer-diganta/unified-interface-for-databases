@@ -21,8 +21,9 @@ const safeJsonStringify = require('safe-json-stringify');
 
 // node hash
 const crypto = require("crypto");
-const { getHash } = require("../../database/mongo");
+const { getHash,getFromHash } = require("../../database/mongo");
 const saveHash = require("../../database/mongo").saveHash;
+
 const newDB = async (req, res) => {
 
     const { host, user, password, database } = req.body;
@@ -138,14 +139,41 @@ WHERE VARIABLE_NAME = 'Uptime';`;
 const connect = async (req, res) => {
     console.log(JSON.stringify(connectData))
     const hash = crypto.createHash("sha256").update(JSON.stringify(connectData)).digest("hex");
-    const result = getHash(hash);
+    const result = await getHash(hash);
     if (result) {
-        res.status(200).json({ connectionUrl : result.connectionUrl, message: "Connected!" })
+        res.status(200).json({ connectionUrl : `localhost:5000/mysql?${result}`, message: "Connected!" })
     }
     else {
         res.status(400).json({ message: "error" })
     }
 }
+
+const getConnected = async (req, res) => {
+    const { url } = req.body
+    const result = await getFromHash(url);
+    if (result) {
+        const data = JSON.parse(result);
+        connection = mysql.createConnection({
+            host: data.host,
+            user: data.user,
+            password: data.password,
+            database: data.database
+        })
+        try {
+            connection.connect();
+            console.log(connection);
+            res.status(200).json({ message: "Connected!" })
+        }
+        catch (error) {
+            console.log(error)
+            res.status(400).json({ message: "OOPPSS" })
+        }
+    }
+    else {
+        res.status(400).json({ message: "error" })
+    }
+}
+
 
 const createDB = async (req, res) => {
     const { database } = req.body;
@@ -343,6 +371,7 @@ module.exports = {
     updateData,
     deleteData,
     createTable,
-    getReport
+    getReport,
+    getConnected
 
 };
